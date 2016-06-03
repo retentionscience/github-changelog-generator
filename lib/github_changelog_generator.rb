@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
 
 require "octokit"
+require 'faraday-http-cache'
+require "logger"
+require "active_support"
 require "json"
 require "colorize"
 require "benchmark"

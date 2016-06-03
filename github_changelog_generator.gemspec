@@ -25,6 +25,8 @@ Gem::Specification.new do |spec|
 
   spec.add_runtime_dependency "rake", ">= 10.0"
   spec.add_runtime_dependency("octokit", ["~> 4.0"])
+  spec.add_runtime_dependency("faraday-http-cache")
+  spec.add_runtime_dependency("activesupport")
   spec.add_runtime_dependency("colorize", ["~> 0.7"])
 
   spec.add_development_dependency("overcommit", ">= 0.31")
