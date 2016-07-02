@@ -1,8 +1,8 @@
 #!/usr/bin/env ruby
 
-require "github_api"
-require "octokit"
 require "json"
+require "multi_json"
+require "octokit"
 require "colorize"
 require "benchmark"
 
