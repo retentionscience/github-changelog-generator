@@ -129,7 +129,7 @@ module GitHubChangelogGenerator
       filtered_tags = all_tags
       tag           = detect_due_tag
       if tag
-        if (all_tags.count > 0) && (all_tags.map { |t| t["name"] }.include? tag)
+        if (all_tags.count > 0) && (all_tags.map { |t| t["name"] }.include?(tag))
           idx = all_tags.index { |t| t["name"] == tag }
           filtered_tags = if idx > 0
                             all_tags[(idx + 1)..-1]
