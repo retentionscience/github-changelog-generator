@@ -1,6 +1,8 @@
 describe GitHubChangelogGenerator::Generator do
   def tag_with_name(tag)
-    {}.tap { |mash_tag| mash_tag["name"] = tag }
+    {
+      'name' => tag
+    }
   end
 
   def tags_from_strings(tags_strings)
