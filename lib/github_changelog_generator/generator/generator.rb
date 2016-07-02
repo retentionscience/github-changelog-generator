@@ -1,4 +1,3 @@
-require_relative "../fetcher"
 require_relative "../octo_fetcher"
 require_relative "generator_generation"
 require_relative "generator_fetcher"

@@ -24,9 +24,9 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency "rake", ">= 10.0"
-  spec.add_runtime_dependency("github_api", ["~> 0.12"])
+  spec.add_runtime_dependency("multi_json", "~> 1.12")
   spec.add_runtime_dependency("octokit", ["~> 4.0"])
-  spec.add_runtime_dependency("colorize", ["~> 0.7"])
+  spec.add_runtime_dependency("colorize", ["~> 0.8"])
 
   spec.add_development_dependency("overcommit", ">= 0.31")
   spec.add_development_dependency("rspec", ">= 3.2")
