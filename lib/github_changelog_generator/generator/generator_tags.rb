@@ -100,7 +100,7 @@ module GitHubChangelogGenerator
       filtered_tags = all_tags
       tag = @options[:due_tag]
       if tag
-        if (all_tags.count > 0) && (all_tags.map { |h| h['name'] }.include? tag)
+        if (all_tags.count > 0) && (all_tags.map { |h| h['name'] }.include?(tag))
           idx = all_tags.index { |t| t['name'] == tag }
           last_index = all_tags.count - 1
           filtered_tags = if idx > 0 && idx < last_index
