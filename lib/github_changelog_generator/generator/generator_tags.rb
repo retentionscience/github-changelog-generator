@@ -39,21 +39,22 @@ module GitHubChangelogGenerator
       end.reverse!
     end
 
-    # Try to find tag date in local hash.
-    # Otherwise fFetch tag time and put it to local hash file.
-    # @param [Hash] tag_name name of the tag
+    # Returns date for given GitHub Tag hash
+    #
+    # Memoize the date by tag name.
+    #
+    # @param [Hash] tag_hash
+    #
     # @return [Time] time of specified tag
-    def get_time_of_tag(tag_name)
-      raise ChangelogGeneratorError, "tag_name is nil".red if tag_name.nil?
+    def get_time_of_tag(tag_hash)
+      raise ChangelogGeneratorError, "tag_hash is nil".red if tag_hash.nil?
 
-      name_of_tag = tag_name["name"]
-      time_for_name = @tag_times_hash[name_of_tag]
-      if !time_for_name.nil?
-        time_for_name
-      else
-        time_string = @fetcher.fetch_date_of_tag tag_name
+      name_of_tag = tag_hash.fetch("name")
+      time_for_tag_name = @tag_times_hash[name_of_tag]
+      return time_for_tag_name if time_for_tag_name
+
+      @fetcher.fetch_date_of_tag(tag_hash).tap do |time_string|
         @tag_times_hash[name_of_tag] = time_string
-        time_string
       end
     end
 
@@ -128,7 +129,7 @@ module GitHubChangelogGenerator
       filtered_tags = all_tags
       tag           = detect_due_tag
       if tag
-        if (all_tags.count > 0) && (all_tags.map { |t| t["name"] }.include? tag)
+        if (all_tags.count > 0) && (all_tags.map { |t| t["name"] }.include?(tag))
           idx = all_tags.index { |t| t["name"] == tag }
           filtered_tags = if idx > 0
                             all_tags[(idx + 1)..-1]
@@ -146,11 +147,11 @@ module GitHubChangelogGenerator
     # @return [Array] filtered tags according :between_tags option
     def filter_between_tags(all_tags)
       filtered_tags = all_tags
-      tag_names     = filtered_tags.map{ |ft| ft['name'] }
+      tag_names     = filtered_tags.map { |ft| ft['name'] }
 
       if @options[:between_tags]
         @options[:between_tags].each do |tag|
-          unless tag_names.include? tag
+          unless tag_names.include?(tag)
             Helper.log.warn "Warning: can't find tag #{tag}, specified with --between-tags option."
           end
         end
@@ -206,7 +207,7 @@ module GitHubChangelogGenerator
     end
 
     def warn_if_tag_not_found(all_tags, tag)
-      unless all_tags.map { |t| t["name"] }.include? tag
+      unless all_tags.map { |t| t["name"] }.include?(tag)
         Helper.log.warn "Warning: can't find tag #{tag}, specified with --exclude-tags option."
       end
     end
