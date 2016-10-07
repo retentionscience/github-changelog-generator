@@ -3,6 +3,8 @@ module GitHubChangelogGenerator
   class Generator
     # fetch, filter tags, fetch dates and sort them in time order
     def fetch_and_filter_tags
+      load_tag_times_hash_json
+
       detect_since_tag
       detect_due_tag
 
@@ -16,6 +18,31 @@ module GitHubChangelogGenerator
       @tag_section_mapping = build_tag_section_mapping(@filtered_tags, sorted_tags)
 
       @filtered_tags
+    end
+
+    # @param [Array] filtered_tags are the tags that need a subsection output
+    # @param [Array] all_tags is the list of all tags ordered from newest -> oldest
+    # @return [Hash] key is the tag to output, value is an array of [Left Tag, Right Tag]
+    # PRs to include in this section will be >= [Left Tag Date] and <= [Right Tag Date]
+    def build_tag_section_mapping(filtered_tags, all_tags)
+      tag_mapping = {}
+      filtered_tags.each do |tag|
+        older_tag_idx = all_tags.index(tag) + 1
+        older_tag = all_tags[older_tag_idx]
+        tag_mapping[tag] = [older_tag, tag]
+      end
+      tag_mapping
+    end
+
+
+    def load_tag_times_hash_json
+      fn = "/tmp/tag_times_hash.json"
+
+      if File.exists?(fn)
+        json = File.read(fn)
+        json = JSON.parse(json)
+        @tag_times_hash ||= JSON.parse(json)
+      end
     end
 
     # @param [Array] filtered_tags are the tags that need a subsection output
@@ -52,6 +79,9 @@ module GitHubChangelogGenerator
 
       name_of_tag = tag_name.fetch("name")
       time_for_tag_name = @tag_times_hash[name_of_tag]
+
+      puts "Got the time for tag in the hash already [#{name_of_tag}]" if time_for_tag_name && (rand(10) % 10 == 0)
+
       return time_for_tag_name if time_for_tag_name
 
       @fetcher.fetch_date_of_tag(tag_name).tap do |time_string|

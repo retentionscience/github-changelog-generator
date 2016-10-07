@@ -30,6 +30,7 @@ module GitHubChangelogGenerator
         end
       end
       threads.each(&:join)
+      File.open('/tmp/tag_times_hash.json', 'w') {|f| f.print @tag_times_hash.to_json }
       puts "Fetching tags dates: #{i}" if options[:verbose]
     end
 

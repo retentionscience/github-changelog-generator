@@ -286,12 +286,19 @@ Make sure, that you push tags to remote repo via 'git push --tags'"
         Helper.log.error e.message
         abort "Error: wrong GitHub token"
       rescue Octokit::Forbidden => e
+        sleep_time = rand(10)
+
+        Helper.log.warn("sleeping #{sleep_time} second")
+        sleep(sleep_time)
         Helper.log.warn e.message
         Helper.log.warn GH_RATE_LIMIT_EXCEEDED_MSG
         Helper.log.warn @client.rate_limit
+
+        retry
       end
       value
     end
+
 
     # Print specified line on the same string
     #
