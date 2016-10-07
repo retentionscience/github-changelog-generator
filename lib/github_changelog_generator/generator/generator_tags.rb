@@ -64,9 +64,6 @@ module GitHubChangelogGenerator
 
       name_of_tag = tag_name.fetch("name")
       time_for_tag_name = @tag_times_hash[name_of_tag]
-
-      puts "Got the time for tag in the hash already [#{name_of_tag}]" if time_for_tag_name && (rand(10) % 10 == 0)
-
       return time_for_tag_name if time_for_tag_name
 
       @fetcher.fetch_date_of_tag(tag_name).tap do |time_string|
