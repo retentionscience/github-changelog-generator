@@ -20,21 +20,6 @@ module GitHubChangelogGenerator
       @filtered_tags
     end
 
-    # @param [Array] filtered_tags are the tags that need a subsection output
-    # @param [Array] all_tags is the list of all tags ordered from newest -> oldest
-    # @return [Hash] key is the tag to output, value is an array of [Left Tag, Right Tag]
-    # PRs to include in this section will be >= [Left Tag Date] and <= [Right Tag Date]
-    def build_tag_section_mapping(filtered_tags, all_tags)
-      tag_mapping = {}
-      filtered_tags.each do |tag|
-        older_tag_idx = all_tags.index(tag) + 1
-        older_tag = all_tags[older_tag_idx]
-        tag_mapping[tag] = [older_tag, tag]
-      end
-      tag_mapping
-    end
-
-
     def load_tag_times_hash_json
       fn = "/tmp/tag_times_hash.json"
 
